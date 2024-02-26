@@ -1,0 +1,94 @@
+---
+title: "BC CRIME"
+author: "Kacper Ruta"
+date: "2024-02-25"
+output: html_document
+---
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+crime_data  <- read.csv("bc_crime.csv")
+```
+
+```{r}
+summary(crime_data)
+```
+
+```{r}
+
+crime_data_selected_years <- crime_data %>%
+  filter(YEAR %in% c(2020, 2021, 2022, 2023)) %>%
+  count(YEAR)
+
+
+ggplot(crime_data_selected_years, aes(x = YEAR, y = n, fill = as.factor(YEAR))) + 
+  geom_bar(stat = "identity", width = 0.8) + 
+  scale_fill_brewer(palette = "Blues") + 
+  labs(title = "Crime Count per Year", x = "Year", y = "Count of Crimes") +
+  theme_minimal()
+```
+
+```{r}
+# Filter for Homicide in the specified years
+homicide_data_years <- crime_data %>%
+  filter(YEAR %in% c(2020, 2021, 2022, 2023) & TYPE == "Homicide") %>%
+  count(YEAR)
+
+# Create the bar chart
+ggplot(homicide_data_years, aes(x = YEAR, y = n, fill = as.factor(YEAR))) +
+  geom_bar(stat = "identity", width = 0.8) + 
+  scale_fill_brewer(palette = "Blues") +
+  labs(title = "Homicide Count per Year", x = "Year", y = "Count of Homicides") +
+  theme_minimal()
+```
+
+```{r}
+# Filter and aggregate data for 2018 excluding Central Business District.
+crime_data_2018_total <- crime_data %>%
+  filter(YEAR == 2018, NEIGHBOURHOOD != "Central Business District") %>%
+  count(NEIGHBOURHOOD)
+
+# Create a colorful bar chart for 2018
+ggplot(crime_data_2018_total, aes(x = NEIGHBOURHOOD, y = n, fill = NEIGHBOURHOOD)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Total Crimes by Neighbourhood in 2019", x = "Neighbourhood", y = "Total Crimes") +
+  theme_minimal() +
+  theme(legend.key.size = unit(0.1, "cm"),
+        axis.text.x = element_text(angle = 90, hjust = 1)) +
+  scale_fill_viridis_d()
+```
+
+```{r}
+# Filter and aggregate data for 2019 excluding Central Business District.
+crime_data_2019_total <- crime_data %>%
+  filter(YEAR == 2019, NEIGHBOURHOOD != "Central Business District") %>%
+  count(NEIGHBOURHOOD)
+
+# Create a colorful bar chart for 2019
+ggplot(crime_data_2019_total, aes(x = NEIGHBOURHOOD, y = n, fill = NEIGHBOURHOOD)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Total Crimes by Neighbourhood in 2019", x = "Neighbourhood", y = "Total Crimes") +
+  theme_minimal() +
+  theme(legend.key.size = unit(0.1, "cm"),
+        axis.text.x = element_text(angle = 90, hjust = 1)) +
+  scale_fill_viridis_d()
+```
+
+```{r}
+# Filter and aggregate data for 2023 excluding Central Business District.
+crime_data_2023_total <- crime_data %>%
+  filter(YEAR == 2023, NEIGHBOURHOOD != "Central Business District") %>%
+  count(NEIGHBOURHOOD)
+
+# Create a colorful bar chart for 2023
+ggplot(crime_data_2023_total, aes(x = NEIGHBOURHOOD, y = n, fill = NEIGHBOURHOOD)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Crime by Area 23", x = "Neighbourhood", y = "Total Crimes Committed") +
+  theme_minimal() +
+  theme(legend.key.size = unit(0.1, "cm"),
+        axis.text.x = element_text(angle = 90, hjust = 1)) +
+  scale_fill_viridis_d()
+```
